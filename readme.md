@@ -1,8 +1,8 @@
-#P5 
+# P5 
 
 Ce Programme permet de trouver un substitut de meilleure qualité nutritionnelle à une liste d’aliments de tous les jours
 
-##Features : 
+## Features : 
 
 1. Recherche d’un substitut de meilleure qualité nutritionnelle à un produit choisi
 2. Accès à des informations pratiques sur le substitut sain pour mieux se renseigner et faciliter son achat 
