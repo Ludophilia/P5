@@ -5,14 +5,12 @@ import requests
 
 """Pour se connecter à mysql et initialiser un curseur"""
 
-# Connexion à la base comme un gros noob. Amazingly secure.
-
 connection = mysql.connector.connect(
     user = 'p5',
     password = '12345',
     host = '127.0.0.1', 
     use_unicode = True
-    ) 
+    # Connexion à la base comme un gros noob. Amazingly secure.) 
 
 cursor = connection.cursor() 
 
@@ -27,9 +25,9 @@ create_db()
 
 """Pour effectuer une recherche dans OFF et obtenir un json"""
 
-#Possible d'appeler une fonction "function()" et de la manipuler comme une variable si la fonction return une donnée exploitable
-
 def off_search(search_term, page_size, page) : 
+    
+    #Possible d'appeler une fonction "function()" et de la manipuler comme une variable si la fonction return une donnée exploitable
 
     param = {"action" : "process", "search_terms" : search_term, "sort_by" : "unique_scans_n", "page_size" : page_size, "page" : page, "json": "true"} 
 
@@ -49,9 +47,8 @@ def add_database(nom_table, *values) :
     cursor.execute(add_stmt)
 
 def vacuum_test(product, keys_to_test) : 
-    # product est un dict
     
-    a = dict()
+    a = dict() # product est un dict
     # print(keys_to_test)
     for value_tested in keys_to_test :
         print(value_tested)
@@ -66,7 +63,9 @@ def vacuum_test(product, keys_to_test) :
     return True if "nutrition_grade_fr" in a else False
 
 for category in categories : 
+    
     #Obj : ajouter la catégorie selectionnée à la table categorie
+    
     try :
         add_database("5db.Categorie", category, "NULL") 
         connection.commit() # Il y avait une solution à base de cursor.execute("Select nom FROM 5db.Categorie"), mais c'est plus cher.
@@ -76,14 +75,14 @@ for category in categories :
     #Obj : Ajouter les 20 produits les plus pop de la catégorie select à la table Produit
 
     for product in off_search(category, 20, 1)['products'] :
+        
         #Il faut vérifier si les données importantes sont en place et passer à une autre produit si ce n'est pas le cas.
 
-        #On itère sur une liste de dict. Chaque itm est un dict, il faut lire certaines clés et verifier leurs valeurs.
+        #print(type(product)) On itère sur une liste de dict. Chaque itm est un dict, il faut lire certaines clés et verifier leurs valeurs.
 
         keys_to_test = ["product_name_fr", "ingredients_text", "quantity", "url", "categories", "stores", "nutrition_grade_fr"]
         list2 = ["nutrition-score-fr", "fat_100g", "saturated-fat_100g", "sugars_100g", "salt_100g"]
         
-        # print(type(product))
         if vacuum_test(product, keys_to_test) == False :
             print("IT WORKS")
         else : 
@@ -91,10 +90,8 @@ for category in categories :
         # vacuum_test(product, keys_to_test)
 
         # print (product)
+    
         # Pourquoi ne pas executer directement l'instruction d'insertion du produit dans la table ? Faut vérifier pour sûr avant...
-
-
-    # print(off_search(category, 10, 1)['products']
 
 cursor.close()
 connection.close()
