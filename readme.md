@@ -1,8 +1,8 @@
-# P5 
+# P5
 
 *P5* permet de **trouver un substitut de meilleure qualité nutritionnelle** à une liste d’aliments de tous les jours
 
-## Features : 
+## Features
 
 - Recherche d’un substitut de meilleure qualité nutritionnelle à un produit choisi
 - Accès à des informations pratiques sur le substitut sain pour mieux se renseigner et faciliter son achat 
