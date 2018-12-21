@@ -12,11 +12,10 @@ connection = mysql.connector.connect(
     use_unicode = True) 
     # Connexion à la base comme un gros noob. Amazingly secure.  
 
-cursor = connection.cursor() 
-
 """Pour créer la base de données"""
 
 def create_db() :    
+    
     cursor2 = connection.cursor() 
 
     with open("database.sql") as f : 
@@ -24,8 +23,6 @@ def create_db() :
             cursor2.execute(x)
             # print(x)
     cursor2.close()
-
-create_db()
 
 """Pour effectuer une recherche dans OFF et obtenir un json"""
 
@@ -36,18 +33,24 @@ def search_off(search_term, page_size, page) :
 
 """Pour insérer le nom des categories dans la table Categorie et insérer 20 produits de chaque categorie dans la table Produit"""
 
-categories = ["Biscuits et gâteaux"] #Commencer avec juste une catégorie (Biscuits et gâteaux), après charger catégories.txt. To hardcode or not to hardcode, that is the question
+def generate_categories() : 
+    categories = [] #Commencer avec juste une catégorie (Biscuits et gâteaux), après charger catégories.txt. To hardcode or not to hardcode, that is the question
 
-nutriscores = ["a", "b", "c", "d", "e"] #A mettre dans le fichier nutriscore.txt ?
-
+    with open("categories-ultrashort.txt") as f : 
+        for category in f.read().splitlines() :
+            categories += [category]
+    return categories
+        
 def add_to_table(table_name, values) :
+    cursor3 = connection.cursor()
+
     extra_statement = {
         "5db.Categorie" : " (nom) VALUES (%s)", 
         "5db.Nutriscore" : " (grade) VALUES (%s)",
         "5db.Produit" : " (nom, description, quantite, off_url, category_name, retailer_name, nutriscore) VALUES (%(product_name)s, %(ingredients_text)s, %(quantity)s, %(url)s, %(categories)s, %(stores)s, %(nutrition_grade_fr)s)"} #%s peut-être utilisé avec des listes plutôt que les tuples de l'exemple de la doc ? Oui. 
 
     addtotable_statement = ("INSERT INTO " + table_name + extra_statement[table_name]) 
-    cursor.execute(addtotable_statement, values)
+    cursor3.execute(addtotable_statement, values)
 
 def vacuum_tester(product) : 
     keys_to_test = ["product_name", "ingredients_text", "quantity", "url", "categories", "stores", "nutrition_grade_fr"]
@@ -84,40 +87,52 @@ def values_for_produit(product, category) :
             values_to_process[key] = product[key]
     return values_to_process 
 
-#Obj : Ajouter les nutriscores 
-
-try :
-    for nutriscore in nutriscores : 
-        add_to_table("5db.Nutriscore", values_for_nutricat(nutriscore))
-        connection.commit() #Sans ça, les données n'étaient pas insérés dans la base, jeez
+def main() :
     
-except :
-    print("Nutriscore already inserted, moving on...")
+    cursor = connection.cursor() 
 
-for category in categories : 
+    create_db()
 
-    #Obj : ajouter la catégorie selectionnée à la table categorie
+    #Obj : Ajouter les nutriscores 
     
+    nutriscores = ["a", "b", "c", "d", "e"] #A mettre dans le fichier nutriscore.txt ?
+
     try :
-        add_to_table("5db.Categorie", values_for_nutricat(category)) 
-        connection.commit()
-
-    except : #Type de l'erreur? ValueError?
-        print("Category already inserted, moving on...")
-    
-    #Obj : Ajouter les 20 produits les plus pop de la catégorie select à la table Produit
-    
-    for product in search_off(category, 20, 1)['products'] :
+        for nutriscore in nutriscores : 
+            add_to_table("5db.Nutriscore", values_for_nutricat(nutriscore))
+            connection.commit() #Sans ça, les données n'étaient pas insérés dans la base, jeez
         
-        if vacuum_tester(product) == False :
-           
-            try : 
-                add_to_table("5db.Produit", values_for_produit(product, category))
-                connection.commit()
+    except :
+        print("Nutriscore already inserted, moving on...")
 
-            except mysql.connector.errors.IntegrityError : 
+    for category in generate_categories() : 
 
-                print("Product already inserted, moving on...")
+        #Obj : ajouter la catégorie selectionnée à la table categorie
+        
+        try :
+            add_to_table("5db.Categorie", values_for_nutricat(category)) 
+            connection.commit()
 
-cursor.close()
-connection.close()
+        except : #Type de l'erreur? ValueError?
+            print("Category already inserted, moving on...")
+        
+        #Obj : Ajouter les 20 produits les plus pop de la catégorie select à la table Produit
+        
+        for product in search_off(category, 20, 1)['products'] :
+            
+            if vacuum_tester(product) == False :
+            
+                try : 
+                    add_to_table("5db.Produit", values_for_produit(product, category))
+                    connection.commit()
+
+                except mysql.connector.errors.IntegrityError : 
+
+                    print("Product already inserted, moving on...") #Cette exception s'est pas mal levé mais je me demande pourquoi, pas moyen d'avoir le message
+
+    cursor.close()
+    connection.close()
+
+if __name__ == "__main__" : 
+    # generate_categories()
+    main()
