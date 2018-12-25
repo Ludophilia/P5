@@ -36,7 +36,7 @@ def search_off(search_term, page_size, page) :
 def generate_categories() : 
     categories = [] #Commencer avec juste une catégorie (Biscuits et gâteaux), après charger catégories.txt. To hardcode or not to hardcode, that is the question
 
-    with open("categories-ultrashort.txt") as f : 
+    with open("categories-short.txt") as f : 
         for category in f.read().splitlines() :
             categories += [category]
     return categories
@@ -97,6 +97,8 @@ def main() :
     
     nutriscores = ["a", "b", "c", "d", "e"] #A mettre dans le fichier nutriscore.txt ?
 
+    #On pourrait cacher ce qui suit dans une fonction add_nutriscores()
+
     try :
         for nutriscore in nutriscores : 
             add_to_table("5db.Nutriscore", values_for_nutricat(nutriscore))
@@ -104,6 +106,8 @@ def main() :
         
     except :
         print("Nutriscore already inserted, moving on...")
+
+    #On pourrait cacher ce qui suit dans une fonction add_categories()
 
     for category in generate_categories() : 
 
@@ -116,6 +120,8 @@ def main() :
         except : #Type de l'erreur? ValueError?
             print("Category already inserted, moving on...")
         
+        #On pourrait cacher ce qui suit dans une fonction add_categories()
+
         #Obj : Ajouter les 20 produits les plus pop de la catégorie select à la table Produit
         
         for product in search_off(category, 20, 1)['products'] :
