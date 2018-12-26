@@ -9,25 +9,20 @@ CREATE TABLE IF NOT EXISTS Nutriscore (
 ) ENGINE = INNODB; 
 
 CREATE TABLE IF NOT EXISTS Categorie (
-    nom VARCHAR(50) NOT NULL,
+    nom VARCHAR(200) NOT NULL,
     description TEXT,
     PRIMARY KEY (nom)
 ) ENGINE = INNODB; 
 
 CREATE TABLE IF NOT EXISTS Produit (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT, 
-    nom VARCHAR(50) NOT NULL UNIQUE,
+    nom VARCHAR(200) NOT NULL UNIQUE,
     description TEXT,
-    quantite DECIMAL(5,1) UNSIGNED,
+    quantite VARCHAR(100),
     off_url TEXT,
     category_name VARCHAR(200) NOT NULL, 
-    retailer_name VARCHAR(200) NOT NULL,
+    retailer_name VARCHAR(200),
     nutriscore CHAR(1) NOT NULL,
-    nutrition_score_100g INT UNSIGNED NOT NULL,
-    lipides_100g DECIMAL(4,1) UNSIGNED NOT NULL,
-    gras_satures_100g DECIMAL(4,1) UNSIGNED NOT NULL,
-    sucres_100g DECIMAL(4,1) UNSIGNED NOT NULL,
-    sel_100g DECIMAL(4,1) UNSIGNED NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_nutriscore_grade FOREIGN KEY (nutriscore) REFERENCES Nutriscore(grade),
     CONSTRAINT fk_category_id FOREIGN KEY (category_name) REFERENCES Categorie(nom)
@@ -39,4 +34,4 @@ CREATE TABLE IF NOT EXISTS Recherche (
     PRIMARY KEY (product_id, substitute_id), 
     CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES Produit(id),
     CONSTRAINT fk_substitute_id FOREIGN KEY (substitute_id) REFERENCES Produit(id) 
-) ENGINE = INNODB;
+) ENGINE = INNODB; -- Attention aux lignes vides qui risquent d'être découpées par .split() et considérés comme une requête vide
