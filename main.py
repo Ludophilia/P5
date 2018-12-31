@@ -1,5 +1,4 @@
 import argparse
-import time
 from classes import *
 
 parser = argparse.ArgumentParser(description="Main script for Projet P5. Help you to improve your diet.")
@@ -13,7 +12,7 @@ print(args)
 def main() : 
     database = Database("p5", "12345", "127.0.0.1", True, args.verbose)
 
-    if args.build_db == True :  
+    if args.build_db == True :  #Ajoutez en UI. Voulez-vous construire la base ? Voulez-vous remplir les tables ?
         
         nutriscores = Structural_data("nutriscores.txt") 
         categories = Structural_data("categories-short.txt") #On en aura peut être besoin de nouveau, pour le moment, ça reste ici...
@@ -32,41 +31,26 @@ def main() :
                 if products.key_tester(product) == False : 
                     database.add_to_table("5db.Produit", products.prepared_for_insertion(category, product))
                     
-    ############################ Test de l'interface utilisateur ##############################
-    
-    def test_input(user_input, prompt) : #Separer le test et la valeur renvoyée
+    # Obj : Coder l'interface utilisateur ! On l'a designé dans un document à part, il faut juste réaliser ce qu'on a pensé...
 
-        while type(user_input) != int : #Prochaine étape, faire en sorte que la fonction
-            try :
-                user_input = int(user_input)
-            
-            except ValueError : 
-                print(("Le caractère que vous avez entré n'est pas un chiffre ou un nombre.\n"
-                "Veuillez entrer un nombre s'il vous plait"))
-                time.sleep(2)
-                user_input = input(prompt) 
-
-   # Obj : Coder l'interface utilisateur ! On l'a designé dans un document à part, il faut juste réaliser ce qu'on a pensé...
-    
+    #La suite ?
+ 
     menu_prompt = ("\nBienvenue sur P5!\n"
         "Menu principal :\n"
         "1. Remplacer un aliment\n"
         "2. Retrouver mes aliments remplacés\n\n")
 
-    error_prompt = ("Le caractère que vous avez entré n'est pas un chiffre ou un nombre.\n"
-    "Veuillez entrer un nombre s'il vous plait")
+    uinput = Ui(menu_prompt)
+    print("après 1er user_input", uinput.user_input)
+    uinput.test_input(menu_prompt)
+    print("après test_input", uinput.user_input, type(uinput.user_input))
 
-    user_input = input(menu_prompt)
-
-    if test_input(user_input, menu_prompt) == 1 :  
-        print("OK")
-    
-    elif test_input(user_input, menu_prompt) == 2 :
+    if uinput.user_input == 1 :  
         print("OK")
     
     else :
         print("PAS OK")
-
+    
     database.close_cursor()
 
 if __name__ == "__main__" : 

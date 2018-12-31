@@ -1,5 +1,36 @@
 import mysql.connector
 import requests
+import time
+
+class Ui :
+    def __init__(self, message) :
+        self.user_input = input(message) #Il va peut-être bouger lui...
+        self.freeze_time = 3
+
+    def test_input(self, re_message) :
+
+        compteur = 0
+        error_prompt = ("Le caractère que vous avez entré n'est pas un chiffre ou un nombre.\n"
+        "Veuillez entrer un nombre s'il vous plait")
+
+        while type(self.user_input) != int :
+            
+            compteur += 1 
+            print("début du bloc while tour", compteur, self.user_input, type(self.user_input))
+            
+            try : 
+                print("début bloc try", self.user_input, type(self.user_input))
+                self.user_input = int(self.user_input)
+                print("fin bloc try", self.user_input, type(self.user_input))
+
+            except ValueError :
+                print("début bloc except", self.user_input, type(self.user_input))
+                print (error_prompt)
+                time.sleep(self.freeze_time)
+                self.user_input = input(re_message) #Normalement, la modification est globale.
+                print("fin bloc except", self.user_input, type(self.user_input))
+
+        print("fin du bloc while tour", compteur, self.user_input, type(self.user_input))
 
 class Database : 
     
