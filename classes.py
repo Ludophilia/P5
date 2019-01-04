@@ -5,32 +5,38 @@ import time
 class Ui :
     def __init__(self, message) :
         self.user_input = input(message) #Il va peut-être bouger lui...
-        self.freeze_time = 3
+        self.freeze_time = 0
 
-    def test_input(self, re_message) :
+    def test_input(self, re_message, min_choice, max_choice) :
 
-        compteur = 0
-        error_prompt = ("Le caractère que vous avez entré n'est pas un chiffre ou un nombre.\n"
+        # compteur = 0
+        type_error = ("Le caractère que vous avez entré n'est pas un chiffre ou un nombre.\n"
         "Veuillez entrer un nombre s'il vous plait")
+        range_error = "Choississez entre {} et {} pour bénéficier du programme".format(min_choice, max_choice)
 
-        while type(self.user_input) != int :
+        while type(self.user_input) != int and self.user_input not in range(min_choice, max_choice+1) :
             
-            compteur += 1 
-            print("début du bloc while tour", compteur, self.user_input, type(self.user_input))
+            # compteur += 1 
+            # print("début du bloc while tour", compteur, self.user_input, type(self.user_input))
             
             try : 
-                print("début bloc try", self.user_input, type(self.user_input))
+                # print("début bloc try", self.user_input, type(self.user_input))
                 self.user_input = int(self.user_input)
-                print("fin bloc try", self.user_input, type(self.user_input))
+                # print("fin bloc try", self.user_input, type(self.user_input))
+                assert self.user_input in range(min_choice, max_choice+1)
 
             except ValueError :
-                print("début bloc except", self.user_input, type(self.user_input))
-                print (error_prompt)
+                # print("début bloc except", self.user_input, type(self.user_input))
+                print (type_error)
                 time.sleep(self.freeze_time)
                 self.user_input = input(re_message) #Normalement, la modification est globale.
-                print("fin bloc except", self.user_input, type(self.user_input))
+                # print("fin bloc except", self.user_input, type(self.user_input))
+            
+            except AssertionError :
+                print (range_error)
+                self.user_input = input(re_message) 
 
-        print("fin du bloc while tour", compteur, self.user_input, type(self.user_input))
+        # print("fin du bloc while tour", compteur, self.user_input, type(self.user_input))
 
 class Database : 
     
