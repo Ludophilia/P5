@@ -104,7 +104,7 @@ def main() :
 
         product_chosen = product_choices[UI.user_input-1][1]
 
-        print("Vous avez choisi {}".format(product_chosen))
+        print("Vous avez choisi \"{}\"".format(product_chosen))
 
         #Obj/Que faire ensuite ? Donner à l'utilisateur un substitut au produit selectionné. 
 
@@ -126,24 +126,22 @@ def main() :
             values = dict(name = results[0][0],
                     description = results[0][1],
                     url = results[0][2],
-                    retailer = results[0][3],
-                    nutriscore = results[0][4],
+                    retailer = results[0][4],
+                    nutriscore = results[0][5],
                     choice = product_chosen)
 
-            # final_result = ("Voici un subtitut plus sain au produit \"{}\" que vous avez choisi :\n"
-            # "Nom : {}\n"
-            # "Nutriscore : {}\n"
-            # "Description nutritionelle : {}\n"
-            # "Vous pouvez acheter le produit ici : {}\n"
-            # "Plus d'infos sur OpenFoodFacts à cette adresse : {}\n"
-            # "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!"
-            # ).format(values['choice'], values['name'], values["nutriscore"], values["description"], values["retailer"])
-
-            print (values)
+            final_result = ("Voici un subtitut plus sain au produit \"{choice}\" que vous avez choisi :\n"
+            "Nom : {name}\n"
+            "Nutriscore : {nutriscore}\n"
+            "Description nutritionelle : {description}\n"
+            "Vous pouvez acheter le produit ici : {retailer}\n"
+            "Plus d'infos sur OpenFoodFacts à cette adresse : {url}\n"
+            "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!"
+            ).format(choice = values['choice'], url = values['url'], name = values['name'], nutriscore = values["nutriscore"], description = values["description"], retailer = values["retailer"])
             
-            # print(final_result) 
+            print(final_result) 
            
-            # Cette determine en fait le produit le plus sain à partir de la categorie du produit et donc sans se soucier plus que ça du produit choisi...        
+            # Cette fonction determine en fait le produit le plus sain à partir de la categorie du produit et donc sans se soucier plus que ça du produit choisi...        
                
                 # Pourquoi ne pas quand même afficher un message si le produit choisi n'est pas plus sain que l'alternative proposée ? 
                 # Et proposer un autre message si le produit choisi est exactement celui qui est considéré comme l'alternative la meilleure. 
