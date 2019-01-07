@@ -7,6 +7,9 @@ class Ui :
         self.user_input = input(message) #Il va peut-être bouger lui...
         self.freeze_time = 0
 
+
+
+    
     def test_input(self, re_message, min_choice, max_choice) :
 
         # compteur = 0

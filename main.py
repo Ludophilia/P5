@@ -45,7 +45,6 @@ def main() :
     UI.test_input(main_menu, 1,2) #Là, test_imp ne fait rien si user_imp est déjà un int
    
     if UI.user_input == 1 :  
-        #Choix remplacer un aliment
         print("Parfait. Vous avez choisi de remplacer un aliment, c'est bien. Très bien même.")
 
         #Obj : Afficher la liste de la liste des categories à choisir 
@@ -103,6 +102,7 @@ def main() :
         UI.test_input(product_menu, 0+1, len(product_choices))
 
         product_chosen = product_choices[UI.user_input-1][1]
+        substitute_obtained = ""
 
         print("Vous avez choisi \"{}\"".format(product_chosen))
 
@@ -129,17 +129,18 @@ def main() :
                     retailer = results[0][4],
                     nutriscore = results[0][5],
                     choice = product_chosen)
+            
+            substitute_obtained = values["name"] 
 
             final_result = ("Voici un subtitut plus sain au produit \"{choice}\" que vous avez choisi :\n"
             "Nom : {name}\n"
             "Nutriscore : {nutriscore}\n"
-            "Description nutritionelle : {description}\n"
+            "Composition : {description}\n"
             "Vous pouvez acheter le produit ici : {retailer}\n"
             "Plus d'infos sur OpenFoodFacts à cette adresse : {url}\n"
-            "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!"
             ).format(choice = values['choice'], url = values['url'], name = values['name'], nutriscore = values["nutriscore"], description = values["description"], retailer = values["retailer"])
             
-            print(final_result) 
+            print(final_result)
            
             # Cette fonction determine en fait le produit le plus sain à partir de la categorie du produit et donc sans se soucier plus que ça du produit choisi...        
                
@@ -147,9 +148,65 @@ def main() :
                 # Et proposer un autre message si le produit choisi est exactement celui qui est considéré comme l'alternative la meilleure. 
 
         determine_substitute()
+        print("what is it", substitute_obtained) 
+
+
+        #Qu'est-ce qu'on doit faire ? 
+
+        #L'utilisateur doit pouvoir enregistrer dans la table le résultat qu'il a obtenu. 
+
+        register_prompt = ("Voulez-vous enregistrer votre recherche pour la retrouver plus tard ?\n"
+        "Astuce : il suffit pour cela de choisir la deuxième option depuis le menu principal\n"
+        "1. Oui, je le veux!\n"
+        "2. Non ! Et puis quoi encore !!\n")
+
+        UI = Ui(register_prompt)
+        
+        UI.test_input(register_prompt, 1,2)
+        
+        if UI.user_input == 1 :
+            print("nom substitut : ",substitute_obtained,
+            "nom produit :", product_chosen)
+
+            #On a le nom du produit mais pas celui du substitut car il a été défini dans une fonction. J'ai essayé de l'appeler avec globals mais la variable a été définie au niveau de la fonction main()...
+
+            #Mieux vaut passer ce qu'on a fait en orienté objet et revenir ici pour le reste... Plus facile ensuite d'appeler l'attribut de l'ui : product chosen, subsitute determined...
+
+            #Et attention au design de l'objet Ui. Mieux vaut une méthode pour prompt ce qu'on attend de l'utilisateur plutôt que de créer un nouvel objet à chaque fois. 
+
+            #Obj :refactorer le code existant vers le paradigme orienté objet histoire de pouvoir manipuler plus facilement. 
+
+
+
+
+        if UI.user_input == 2 :
+            print(("Bien compris\n"
+            "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!"))
+
+
+
+        #Comment on fait ? 
+        # Poser une question, attendre un chiffre
+        # Tester l'input
+        # Une requête SQL pour sûr. 
+            # Laquelle ? Il faut le product_id et le substitute_id ? Comment les obtenir ? Requête de l'id avec le nom produit et nom substitut : 
+            # SELECT id FROM Produit WHERE nom = "Pain au lait" ; > 96
+            # SELECT id FROM Produit WHERE nom = "Pitch brioches Pépites de Chocolat (x 8)" ; > 82
+            #Reste à savoir où récupérer le nom produit.
 
     elif UI.user_input == 2 : 
         #Choix retrouver mes aliments remplacés
+
+        #Obj, qu'est ce qu'on doit faire ? 
+
+        #Charger les requêtes que l'utilisateur a enregistré.
+
+        #Comment on fait ?
+
+        #Au minimum, une requête SQL.
+
+        #Prevoir aussi ce qu'il faut faire si une requête a déjà été enregistrée.
+
         print("Choix 2. En construction.")
     
     database.close_cursor()
