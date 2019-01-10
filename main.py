@@ -14,7 +14,6 @@ def main() :
     UI = Ui()
 
     if args.build_db == True :  
-        #Pourquoi ne pas ajouter en UI. Voulez-vous construire la base ? Voulez-vous remplir les tables ?
         
         nutriscores = Structural_data("nutriscores.txt") 
         categories = Structural_data("categories-short.txt")
@@ -77,18 +76,19 @@ def main() :
             "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!"))
 
     elif UI.user_input == 2 : 
-        #Choix retrouver mes aliments remplacés
+        print("Vous avez choisi de retrouver un aliment déjà remplacé.\n")
 
-        #Obj, qu'est ce qu'on doit faire ? 
+        database.retrieve_data("substitution_data", UI)
+        UI.build_selection("substitution_menu")
+        UI.ask_user(UI.substitution_menu)
+        UI.test_input(UI.substitution_menu, 1,len(UI.subtitution_choices))
+        UI.set_chosen("substitute_chosen")
+        database.retrieve_data("substitute_data", UI)
+        UI.display_substitute()
 
-            #Charger les requêtes que l'utilisateur a enregistré.
+        #Prevoir aussi ce qu'il faut faire si on essaie d'enregistrer une requête qui a déjà été enregistrée.
 
-        #Comment on fait ?
-
-            #Au minimum, une requête SQL.
-            #Prevoir aussi ce qu'il faut faire si une requête a déjà été enregistrée.
-
-        print("Choix 2. En construction.")
+        print("Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!")
     
     database.close_cursor()
 

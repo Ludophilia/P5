@@ -22,7 +22,11 @@ class Ui :
         "Astuce : pour retrouver votre recherche, choisissez la deuxième option depuis le menu principal\n"
         "1. Oui, je le veux !\n"
         "2. Non ! Et puis quoi encore !!\n")
-        self.id_list = list() 
+        self.id_list = list()
+        self.subtitution_choices = list() 
+        self.substitution_menu = ("Choisissez une substitution :\n")
+        self.substitute_chosen = str()
+        self.id_substitute_chosen = int()
 
     def ask_user(self, message) : 
         self.user_input = input(message)
@@ -30,16 +34,13 @@ class Ui :
     def build_selection(self, menu_type) :
 
         if menu_type == "category_menu" : 
-            #Etape 2, stocker les données de la base dans une liste et appliquer à chaque donnée un numéro pour les rendre sélectionnable
-
+   
             for item, in self.names_retrieved : self.category_choices += [item]
             self.category_choices = list(enumerate(self.category_choices, start = 1))
 
-            #Etape 3, créer un menu où sont affichés tous les choix de l'utilisateur à partir des éléments de la liste
-
             for number, choice in self.category_choices :
                 self.category_menu += "{} : {} \n".format(number, choice)
-            
+
             self.category_menu += "Votre choix ?\n"
         
         if menu_type == "product_menu" : 
@@ -52,12 +53,18 @@ class Ui :
             
             self.product_menu += "Alors alors ??\n"
 
+        if menu_type == "substitution_menu" : 
+            self.subtitution_choices = list(enumerate(self.names_retrieved, start = 1))
+
+            for number, ((product, product_id), (substitute, substitute_id)) in self.subtitution_choices :
+                self.substitution_menu += "{} : {} remplacé par {} \n".format(number, product, substitute)
+            self.substitution_menu += "Votre choix ?\n"
+
     def display_substitute (self) : 
       
-        # Cette fonction determine en fait le produit le plus sain à partir de la categorie du produit et donc sans se soucier plus que ça du produit choisi...        
-               
-            # Pourquoi ne pas quand même afficher un message si le produit choisi n'est pas plus sain que l'alternative proposée ? 
-            # Et proposer un autre message si le produit choisi est exactement celui qui est considéré comme l'alternative la meilleure. 
+        # Cette fonction determine en fait le produit le plus sain à partir de la categorie du produit et donc sans se soucier plus que ça du produit choisi...   
+        # Pourquoi ne pas quand même afficher un message si le produit choisi n'est pas plus sain que l'alternative proposée ? 
+        # Et proposer un autre message si le produit choisi est exactement celui qui est considéré comme l'alternative la meilleure. 
 
         self.substitute_data = {
             "name" : self.names_retrieved[0][0],
@@ -69,7 +76,7 @@ class Ui :
 
         self.substitute_name = self.substitute_data["name"]
 
-        self.substitute_prompt = ("Voici un subtitut plus sain au produit \"{choice}\" que vous avez choisi :\n"
+        self.substitute_prompt = ("Voici un subtitut plus sain au produit \"{choice}\" que vous avez choisi de remplacer : \n"
             "Nom : {name}\n"
             "Nutriscore : {nutriscore}\n"
             "Composition : {description}\n"
@@ -84,7 +91,6 @@ class Ui :
 
         print(self.substitute_prompt)
 
-
     def set_chosen(self, choice_type) : 
         
         if choice_type == "category_chosen" : 
@@ -94,7 +100,14 @@ class Ui :
         if choice_type == "product_chosen" : 
 
             self.product_chosen = self.product_choices[self.user_input-1][1]
-            print(self.product_chosen)
+     
+        if choice_type == "substitute_chosen" : 
+            
+            self.product_chosen = self.subtitution_choices[self.user_input-1][1][0][0]
+
+            self.substitute_chosen = self.subtitution_choices[self.user_input-1][1][1][0]
+
+            self.id_substitute_chosen = self.subtitution_choices[self.user_input-1][1][1][1]
 
     def test_input(self, re_message, min_choice, max_choice) :
 
@@ -132,18 +145,37 @@ class Database :
 
     def retrieve_data(self, type_data, Ui_object) :
 
-        #Etape 1, rechercher des données appropriée dans la table appropriée
+        if type_data == "category_data" or type_data == "product_data" or type_data == "substitute_data" : 
+            if type_data == "category_data" :
+                self.cursor.execute("SELECT nom FROM 5db.Categorie")
 
-        if type_data == "category_data" :
-            self.cursor.execute("SELECT nom FROM 5db.Categorie")
+            elif type_data == "product_data" :
+                self.cursor.execute("SELECT nom FROM 5db.Produit WHERE category_name = %s", [Ui_object.category_chosen]) 
 
-        elif type_data == "product_data" :
-            self.cursor.execute("SELECT nom FROM 5db.Produit WHERE category_name = %s", [Ui_object.category_chosen]) 
+            elif type_data == "substitute_data" : 
+                
+                if len(Ui_object.category_chosen) !=0 : 
+                    self.cursor.execute("SELECT nom, description, off_url, category_name, retailer_name, nutriscore FROM 5db.Produit WHERE category_name = %s ORDER BY nutriscore LIMIT 1", [Ui_object.category_chosen])
+                     
+                elif Ui_object.id_substitute_chosen != 0 : 
+                    self.cursor.execute("SELECT nom, description, off_url, category_name, retailer_name, nutriscore FROM 5db.Produit WHERE id = %s", [Ui_object.id_substitute_chosen])
 
-        elif type_data == "substitute_data" :
-            self.cursor.execute("SELECT nom, description, off_url, category_name, retailer_name, nutriscore FROM 5db.Produit WHERE category_name = %s ORDER BY nutriscore LIMIT 1", [Ui_object.category_chosen])
+            Ui_object.names_retrieved = self.cursor.fetchall()
 
-        Ui_object.names_retrieved = self.cursor.fetchall()
+        elif type_data == "substitution_data" :
+            
+            self.cursor.execute("SELECT * FROM 5db.Recherche")
+            id_data = self.cursor.fetchall()
+
+            for product_id, substitute_id in id_data : 
+
+                self.cursor.execute("SELECT nom FROM 5db.Produit WHERE id = %s", [product_id])
+                product_name = self.cursor.fetchall()[0][0]
+
+                self.cursor.execute("SELECT nom FROM 5db.Produit WHERE id = %s", [substitute_id])
+                substitute_name = self.cursor.fetchall()[0][0]
+
+                Ui_object.names_retrieved += [((product_name, product_id), (substitute_name, substitute_id))]
 
     def retrieve_id(self, Ui_object) :
 
@@ -199,6 +231,8 @@ class Structural_data :
 
 class Product_data :
     
+    #On peut sans doute fusionner avec la classe suivante
+
     def __init__ (self, search_terms, page_size, page_number, verbosity) : 
         self.search_pr = {"action" : "process", "search_terms" : search_terms, "sort_by" : "unique_scans_n", "page_size" : page_size, "page" : page_number, "json": "true"}
         self.data = requests.get('https://fr.openfoodfacts.org/cgi/search.pl', params = self.search_pr)
