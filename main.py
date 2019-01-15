@@ -7,36 +7,35 @@ parser.add_argument('-b', '--build_db', help = "Enable or disable database creat
 parser.add_argument('-v', '--verbose', help = "Make table filling and data testing talkative", action = "store_true")
 
 args = parser.parse_args()
-print(args)
 
-def main() : 
+def main(): #La pep8, c'est if: et pas if: (80c) #pycodestyle #un fichier requierement.txt (pour que qqn puisse installer le programme) #
     database = Database("p5", "12345", "127.0.0.1", True, args.verbose)
     UI = Ui()
 
-    if args.build_db == True :  
+    if args.build_db == True:  
         
         nutriscores = Structural_data("nutriscores.txt") 
         categories = Structural_data("categories-short.txt")
 
         database.create_database("database.sql", ";")
     
-        for nutriscore in nutriscores.listversion :
+        for nutriscore in nutriscores.listversion:
             database.add_to_table("5db.Nutriscore", nutriscores.prepared_for_insertion(nutriscore))
 
-        for category in categories.listversion : 
+        for category in categories.listversion: 
             database.add_to_table("5db.Categorie", categories.prepared_for_insertion(category))
 
             products = Product_data(category,20, 1, args.verbose)
 
-            for product in products.listversion : 
-                if products.key_tester(product) == False : 
+            for product in products.listversion: 
+                if products.key_tester(product) == False: 
                     database.add_to_table("5db.Produit", products.prepared_for_insertion(category, product))
                     
     UI.ask_user(UI.main_menu)
     
     UI.test_input(UI.main_menu, 1,2)
    
-    if UI.user_input == 1 :  
+    if UI.user_input == 1:  
         
         print("Parfait. Vous avez choisi de remplacer un aliment, c'est bien. Très bien même.")
 
@@ -62,7 +61,7 @@ def main() :
         UI.ask_user(UI.save_menu)  
         UI.test_input(UI.save_menu, 1,2)
         
-        if UI.user_input == 1 :
+        if UI.user_input == 1:
             
             database.retrieve_id(UI)
             database.add_to_table("5db.Recherche", UI.id_list)
@@ -70,12 +69,12 @@ def main() :
             print(("Recherche enregistrée !\n"
             "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!")) #Pas de condition qui déclenche ceci ? Donc ça arrive même si le produit est déjà enregistré
     
-        elif UI.user_input == 2 :
+        elif UI.user_input == 2:
             
             print(("Bien compris\n"
             "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!"))
 
-    elif UI.user_input == 2 : 
+    elif UI.user_input == 2: 
         print("Vous avez choisi de retrouver un aliment déjà remplacé.\n")
 
         database.retrieve_data("substitution_data", UI)
@@ -92,5 +91,5 @@ def main() :
     
     database.close_cursor()
 
-if __name__ == "__main__" : 
+if __name__ == "__main__": 
     main()
