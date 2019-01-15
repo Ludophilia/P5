@@ -9,8 +9,8 @@ class Ui:
         self.parser = argparse.ArgumentParser(
             description=("Main script for Projet P5." "Help you to improve your diet."))
         self.freeze_time = freeze_time
-        self.main_menu = ("Bienvenue sur P5!\n" "Menu principal:\n" "1. Remplacer un aliment\n"
-        "2. Retrouver mes aliments remplacés\n")
+        self.user_motivated = True
+        self.main_menu = ("P5, un programme qui vous veut du bien* (et qui s'utilise avec les touches du clavier)!!\n\n" "1. Remplacer un aliment par un équivalent plus sain\n" "2. Retrouver mes aliments remplacés\n")
         self.names_retrieved = list()
         self.category_menu = ("Choisissez désormais votre catégorie: \n")
         self.category_choices = list()
@@ -30,10 +30,25 @@ class Ui:
         self.substitution_menu = ("Choisissez une substitution:\n")
         self.substitute_chosen = str()
         self.id_substitute_chosen = int()
+        self.retry_menu = ("Voulez-vous faire une nouvelle recherche?\n1. Oui, pourquoi pas?\n2. Non.\n")
 
     @property
     def parser_args(self):
         return self.parser.parse_args()
+
+    def reset_attributes(self) : 
+        self.names_retrieved = list()
+        self.category_choices = list()
+        self.category_chosen = str()
+        self.product_choices = list()
+        self.product_chosen = str()
+        self.substitute_data = dict()
+        self.substitute_name = str()
+        self.substitute_prompt = str()
+        self.id_list = list()
+        self.subtitution_choices = list() 
+        self.substitute_chosen = str()
+        self.id_substitute_chosen = int()
 
     def add_argument_to_parser(self, short, long, help, action): 
         self.parser.add_argument(short, long, help=help, action=action)
