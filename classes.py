@@ -87,17 +87,13 @@ class Ui:
 
     def display_substitute (self): 
       
-        # Cette fonction determine en fait le produit le plus sain à partir de la categorie du produit et donc sans se soucier plus que ça du produit choisi...   
-        # Pourquoi ne pas quand même afficher un message si le produit choisi n'est pas plus sain que l'alternative proposée ? 
-        # Et proposer un autre message si le produit choisi est exactement celui qui est considéré comme l'alternative la meilleure. 
-
         self.substitute_data = {
             "name": self.names_retrieved[0][0],
             "description": self.names_retrieved[0][1],
             "url": self.names_retrieved[0][2],
             "retailer": self.names_retrieved[0][4],
             "nutriscore": self.names_retrieved[0][5],
-            "choice": self.product_chosen }
+            "choice": self.product_chosen}
 
         self.substitute_name = self.substitute_data["name"]
 
@@ -114,7 +110,11 @@ class Ui:
             description = self.substitute_data["description"], 
             retailer = self.substitute_data["retailer"])
 
-        print(self.substitute_prompt)
+        if self.substitute_name == self.product_chosen: 
+            print ("Mais...! {} est déjà le produit le plus sain que je peux vous proposer ! Mon rôle s'arrête ici, à moins que...\n".format(self.product_chosen))
+
+        else : 
+            print(self.substitute_prompt)
 
     def set_chosen(self, choice_type): 
         

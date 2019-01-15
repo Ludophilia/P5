@@ -64,30 +64,31 @@ def main():
             database.retrieve_data("substitute_data", UI)
             UI.display_substitute()
             
-            UI.ask_user(UI.save_menu)  
-            UI.test_input(UI.save_menu, 1,2)
+            if UI.substitute_name != UI.product_chosen:
+                UI.ask_user(UI.save_menu)  
+                UI.test_input(UI.save_menu, 1,2)
             
-            if UI.user_input == 1:
-                
-                database.retrieve_id(UI)
-                database.add_to_table("5db.Research", UI.id_list)
+                if UI.user_input == 1:
+                    
+                    database.retrieve_id(UI)
+                    database.add_to_table("5db.Research", UI.id_list)
 
-                print(("Recherche enregistrée !\n")) #Pas de condition qui déclenche ceci ? Donc ça arrive même si le produit est déjà enregistré
-        
-            elif UI.user_input == 2:
-                
-                print("Bien compris !\n")
+                    print(("Recherche enregistrée !\n")) #Pas de condition qui déclenche ceci ? Donc ça arrive même si le produit est déjà enregistré
+            
+                elif UI.user_input == 2:
+                    
+                    print("Bien compris !\n")
 
         elif UI.user_input == 2: 
             
-            #Faut mettre une condition dans le cas où la database est vide !!
-
             print("Vous avez choisi de retrouver un aliment déjà remplacé.\n")
+
+            #Faut mettre une condition dans le cas où la database est vide !!
 
             database.retrieve_data("substitution_data", UI)
             UI.build_selection("substitution_menu")
             UI.ask_user(UI.substitution_menu)
-            UI.test_input(UI.substitution_menu, 1,len(UI.subtitution_choices))
+            UI.test_input(UI.substitution_menu, 1, len(UI.subtitution_choices))
             UI.set_chosen("substitute_chosen")
             database.retrieve_data("substitute_data", UI)
             UI.display_substitute()
