@@ -132,13 +132,14 @@ class Ui:
 
 class Database: 
     
-    def __init__(self, user, password, host, use_unicode, verbosity): 
+    def __init__(self, user, password, host, database, use_unicode, verbosity): 
         
         self.connection = mysql.connector.connect(
             user = user,
             password = password,
             host = host, 
-            use_unicode = use_unicode) #Toujours comme un gros noob
+            database = database,
+            use_unicode = use_unicode) 
           
         self.cursor = self.connection.cursor()
         self.verbose = verbosity

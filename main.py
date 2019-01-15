@@ -1,6 +1,8 @@
 import argparse
 from classes import *
+import config as cfg
 
+#argparser dans Ui ? 
 parser = argparse.ArgumentParser(description="Main script for Projet P5. Help you to improve your diet.")
 
 parser.add_argument('-b', '--build_db', help = "Enable or disable database creation and filling", action = "store_true")
@@ -8,8 +10,18 @@ parser.add_argument('-v', '--verbose', help = "Make table filling and data testi
 
 args = parser.parse_args()
 
-def main(): #La pep8, c'est if: et pas if : (80c) #pycodestyle #un fichier requierement.txt (pour que qqn puisse installer le programme) #
-    database = Database("p5", "12345", "127.0.0.1", True, args.verbose)
+print(cfg.mysql.values())
+
+def main(): #La pep8, (80c) #pycodestyle
+    
+    database = Database(
+        cfg.mysql['user'], 
+        cfg.mysql['password'],
+        cfg.mysql['host'], 
+        cfg.mysql['database'], 
+        cfg.mysql['use_unicode'],
+        args.verbose)
+    
     UI = Ui()
 
     if args.build_db == True:  
@@ -30,7 +42,9 @@ def main(): #La pep8, c'est if: et pas if : (80c) #pycodestyle #un fichier requi
             for product in products.listversion: 
                 if products.key_tester(product) == False: 
                     database.add_to_table("5db.Product", products.prepared_for_insertion(category, product))
-                    
+    
+    #Pourquoi ne pas mettre le tout dans une boucle while et la briser si l'utilisateur fait le choix 2 et qu'il y a rien. l'attribut (alive) stockée dans UI et changerait sous condition. ça pourrait être lié à une variable user_input quit aussi.
+    
     UI.ask_user(UI.main_menu)
     
     UI.test_input(UI.main_menu, 1,2)
@@ -66,13 +80,11 @@ def main(): #La pep8, c'est if: et pas if : (80c) #pycodestyle #un fichier requi
             database.retrieve_id(UI)
             database.add_to_table("5db.Research", UI.id_list)
 
-            print(("Recherche enregistrée !\n"
-            "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!")) #Pas de condition qui déclenche ceci ? Donc ça arrive même si le produit est déjà enregistré
+            print(("Recherche enregistrée !\n")) #Pas de condition qui déclenche ceci ? Donc ça arrive même si le produit est déjà enregistré
     
         elif UI.user_input == 2:
             
-            print(("Bien compris\n"
-            "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!"))
+            print(("Bien compris !\n"))
 
     elif UI.user_input == 2: 
         
@@ -90,7 +102,7 @@ def main(): #La pep8, c'est if: et pas if : (80c) #pycodestyle #un fichier requi
 
         #Prevoir aussi ce qu'il faut faire si on essaie d'enregistrer une requête qui a déjà été enregistrée.
 
-        print("Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!")
+    print("Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!")
     
     database.close_cursor()
 
