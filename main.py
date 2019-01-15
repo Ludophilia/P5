@@ -12,7 +12,6 @@ def main():
         cfg.mysql['user'], 
         cfg.mysql['password'],
         cfg.mysql['host'], 
-        cfg.mysql['database'], 
         cfg.mysql['use_unicode'],
         UI.parser_args.verbose)
     
@@ -83,21 +82,20 @@ def main():
                     print("Bien compris !\n")
 
         elif UI.user_input == 2: 
-            
-            print("Vous avez choisi de retrouver un aliment déjà remplacé.\n")
 
-            #Faut mettre une condition dans le cas où la database est vide !!
+            if len(UI.names_retrieved) == 0 :
+                print("L'historique des recherches est vide. Recherchez d'abord des substituts plus sains à des aliments de votre choix et enregistrez vos recherches avant de revenir ici!\n")
+                
+            else : 
+                print("Vous avez choisi de retrouver un aliment déjà remplacé.\n")
+                database.retrieve_data("substitution_data", UI)
+                UI.build_selection("substitution_menu")
+                UI.ask_user(UI.substitution_menu)
+                UI.test_input(UI.substitution_menu, 1, len(UI.subtitution_choices))
+                UI.set_chosen("substitute_chosen")
+                database.retrieve_data("substitute_data", UI)
+                UI.display_substitute()
 
-            database.retrieve_data("substitution_data", UI)
-            UI.build_selection("substitution_menu")
-            UI.ask_user(UI.substitution_menu)
-            UI.test_input(UI.substitution_menu, 1, len(UI.subtitution_choices))
-            UI.set_chosen("substitute_chosen")
-            database.retrieve_data("substitute_data", UI)
-            UI.display_substitute()
-
-            #Prevoir aussi ce qu'il faut faire si on essaie d'enregistrer une requête qui a déjà été enregistrée.
-        
         UI.ask_user(UI.retry_menu)
         UI.test_input(UI.retry_menu, 1,2)
 

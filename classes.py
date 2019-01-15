@@ -30,7 +30,7 @@ class Ui:
         self.substitution_menu = ("Choisissez une substitution:\n")
         self.substitute_chosen = str()
         self.id_substitute_chosen = int()
-        self.retry_menu = ("Voulez-vous faire une nouvelle recherche?\n1. Oui, pourquoi pas?\n2. Non.\n")
+        self.retry_menu = ("Voulez-vous faire une nouvelle recherche?\n1. Oui, pourquoi pas?\n2. Non\n")
 
     @property
     def parser_args(self):
@@ -157,13 +157,12 @@ class Ui:
 
 class Database: 
     
-    def __init__(self, user, password, host, database, use_unicode, verbosity): 
+    def __init__(self, user, password, host, use_unicode, verbosity): 
         
         self.connection = mysql.connector.connect(
             user = user,
             password = password,
             host = host, 
-            database = database,
             use_unicode = use_unicode) 
           
         self.cursor = self.connection.cursor()
