@@ -1,30 +1,22 @@
-import argparse
 from classes import *
 import config as cfg
 
-#argparser dans Ui ? 
-parser = argparse.ArgumentParser(description="Main script for Projet P5. Help you to improve your diet.")
-
-parser.add_argument('-b', '--build_db', help = "Enable or disable database creation and filling", action = "store_true")
-parser.add_argument('-v', '--verbose', help = "Make table filling and data testing talkative", action = "store_true")
-
-args = parser.parse_args()
-
-print(cfg.mysql.values())
-
-def main(): #La pep8, (80c) #pycodestyle
+def main():
     
+    UI = Ui(1.5)
+
+    UI.add_argument_to_parser('-b', '--build_db', "Enable or disable database creation and filling", "store_true")
+    UI.add_argument_to_parser('-v', '--verbose', "Make table filling and data testing talkative", "store_true")
+
     database = Database(
         cfg.mysql['user'], 
         cfg.mysql['password'],
         cfg.mysql['host'], 
         cfg.mysql['database'], 
         cfg.mysql['use_unicode'],
-        args.verbose)
+        UI.parser_args.verbose)
     
-    UI = Ui()
-
-    if args.build_db == True:  
+    if UI.parser_args.build_db is True:  
         
         nutriscores = Structural_data("nutriscores.txt") 
         categories = Structural_data("categories-short.txt")
@@ -37,7 +29,7 @@ def main(): #La pep8, (80c) #pycodestyle
         for category in categories.listversion: 
             database.add_to_table("5db.Category", categories.prepared_for_insertion(category))
 
-            products = Product_data(category,20, 1, args.verbose)
+            products = Product_data(category, 20, 1, UI.parser_args.verbose)
 
             for product in products.listversion: 
                 if products.key_tester(product) == False: 

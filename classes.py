@@ -1,11 +1,14 @@
+import argparse
 import mysql.connector
 import requests
 import time
 
 class Ui:
-    def __init__(self):
+    def __init__(self, freeze_time):
         self.user_input = str()
-        self.freeze_time = int()
+        self.parser = argparse.ArgumentParser(
+            description=("Main script for Projet P5." "Help you to improve your diet."))
+        self.freeze_time = freeze_time
         self.main_menu = ("Bienvenue sur P5!\n" "Menu principal:\n" "1. Remplacer un aliment\n"
         "2. Retrouver mes aliments remplacés\n")
         self.names_retrieved = list()
@@ -28,6 +31,13 @@ class Ui:
         self.substitute_chosen = str()
         self.id_substitute_chosen = int()
 
+    @property
+    def parser_args(self):
+        return self.parser.parse_args()
+
+    def add_argument_to_parser(self, short, long, help, action): 
+        self.parser.add_argument(short, long, help=help, action=action)
+        
     def ask_user(self, message): 
         self.user_input = input(message)
 
