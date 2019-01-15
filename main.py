@@ -8,7 +8,7 @@ parser.add_argument('-v', '--verbose', help = "Make table filling and data testi
 
 args = parser.parse_args()
 
-def main(): #La pep8, c'est if: et pas if: (80c) #pycodestyle #un fichier requierement.txt (pour que qqn puisse installer le programme) #
+def main(): #La pep8, c'est if: et pas if : (80c) #pycodestyle #un fichier requierement.txt (pour que qqn puisse installer le programme) #
     database = Database("p5", "12345", "127.0.0.1", True, args.verbose)
     UI = Ui()
 
@@ -23,13 +23,13 @@ def main(): #La pep8, c'est if: et pas if: (80c) #pycodestyle #un fichier requie
             database.add_to_table("5db.Nutriscore", nutriscores.prepared_for_insertion(nutriscore))
 
         for category in categories.listversion: 
-            database.add_to_table("5db.Categorie", categories.prepared_for_insertion(category))
+            database.add_to_table("5db.Category", categories.prepared_for_insertion(category))
 
             products = Product_data(category,20, 1, args.verbose)
 
             for product in products.listversion: 
                 if products.key_tester(product) == False: 
-                    database.add_to_table("5db.Produit", products.prepared_for_insertion(category, product))
+                    database.add_to_table("5db.Product", products.prepared_for_insertion(category, product))
                     
     UI.ask_user(UI.main_menu)
     
@@ -64,7 +64,7 @@ def main(): #La pep8, c'est if: et pas if: (80c) #pycodestyle #un fichier requie
         if UI.user_input == 1:
             
             database.retrieve_id(UI)
-            database.add_to_table("5db.Recherche", UI.id_list)
+            database.add_to_table("5db.Research", UI.id_list)
 
             print(("Recherche enregistrée !\n"
             "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!")) #Pas de condition qui déclenche ceci ? Donc ça arrive même si le produit est déjà enregistré
@@ -75,6 +75,9 @@ def main(): #La pep8, c'est if: et pas if: (80c) #pycodestyle #un fichier requie
             "Merci d'avoir utilisé le programme, à une prochaine fois peut-être !!"))
 
     elif UI.user_input == 2: 
+        
+        #Faut mettre une condition dans le cas où la database est vide !!
+
         print("Vous avez choisi de retrouver un aliment déjà remplacé.\n")
 
         database.retrieve_data("substitution_data", UI)

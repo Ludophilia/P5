@@ -26,10 +26,10 @@ CREATE TABLE IF NOT EXISTS Product (
     CONSTRAINT fk_category_id FOREIGN KEY (category) REFERENCES Category(name)
 ) ENGINE = INNODB;
 
-CREATE TABLE IF NOT EXISTS Recherche (
+CREATE TABLE IF NOT EXISTS Research (
     product_id INT UNSIGNED NOT NULL,
     substitute_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (product_id, substitute_id), 
-    CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES Produit(id),
-    CONSTRAINT fk_substitute_id FOREIGN KEY (substitute_id) REFERENCES Produit(id) 
+    CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES Product(id),
+    CONSTRAINT fk_substitute_id FOREIGN KEY (substitute_id) REFERENCES Product(id) 
 ) ENGINE = INNODB;
