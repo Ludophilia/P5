@@ -73,8 +73,11 @@ def main():
                     database.retrieve_id(UI)
                     database.add_to_table("5db.Research", UI.id_list)
 
-                    print(("Recherche enregistrée !\n")) #Pas de condition qui déclenche ceci ? Donc ça arrive même si le produit est déjà enregistré
-            
+                    if database.research_duplicate is False: 
+                        print("Recherche enregistrée !\n")
+                    else: 
+                        print("Cette recherche figure déjà dans l'historique et de fait ne peut pas être enrigistrée!!\n")
+                        
                 elif UI.user_input == 2:
                     
                     print("Bien compris !\n")

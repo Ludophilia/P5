@@ -168,6 +168,7 @@ class Database:
           
         self.cursor = self.connection.cursor()
         self.verbose = verbosity
+        self.research_duplicate = False
 
     def retrieve_data(self, type_data, Ui_object):
 
@@ -230,7 +231,10 @@ class Database:
 
         except mysql.connector.errors.IntegrityError:
             if self.verbose == True:
-                print("Item déjà enregistré dans {}, produit suivant!".format(table_name))
+                print("WARNING: Element déjà enregistré dans {} !".format(table_name))
+
+            if table_name == "5db.Research": 
+                self.research_duplicate = True
 
     def close_cursor(self): 
         return self.cursor.close()
