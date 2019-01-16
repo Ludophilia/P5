@@ -91,13 +91,14 @@ def main():
                     print("Bien compris !\n")
 
         elif UI.user_input == 2: 
+                
+            database.retrieve_data("substitution_data", UI)
 
             if len(UI.names_retrieved) == 0 :
                 print("L'historique des recherches est vide. Recherchez d'abord des substituts plus sains à des aliments de votre choix et enregistrez vos recherches avant de revenir ici!\n")
                 
             else : 
                 print("Vous avez choisi de retrouver un aliment déjà remplacé.\n")
-                database.retrieve_data("substitution_data", UI)
                 UI.build_selection("substitution_menu")
                 UI.ask_user(UI.substitution_menu)
                 UI.test_input(UI.substitution_menu, 1, len(UI.subtitution_choices))

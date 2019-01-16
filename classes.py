@@ -10,12 +10,12 @@ class Ui:
             description=("Main script for Projet P5." "Help you to improve your diet."))
         self.freeze_time = freeze_time
         self.user_motivated = True
-        self.main_menu = ("P5, un programme qui vous veut du bien* (et qui s'utilise avec les touches du clavier)!!\n\n" "1. Remplacer un aliment par un équivalent plus sain\n" "2. Retrouver mes aliments remplacés\n")
+        self.main_menu = ("\nP5, un programme qui vous veut du bien et qui s'utilise avec les touches du clavier\n\n" "1. Remplacer un aliment par un équivalent plus sain\n" "2. Retrouver mes aliments remplacés\n")
         self.names_retrieved = list()
-        self.category_menu = ("Choisissez désormais votre catégorie: \n")
+        self.category_menu = ("\nChoisissez désormais votre catégorie:\n")
         self.category_choices = list()
         self.category_chosen = str()
-        self.product_menu = ("Choisissez désormais l'aliment à remplacer: \n")
+        self.product_menu = ("\nChoisissez désormais l'aliment à remplacer:\n")
         self.product_choices = list()
         self.product_chosen = str()
         self.substitute_data = dict()
@@ -27,7 +27,7 @@ class Ui:
         "2. Non ! Et puis quoi encore !!\n")
         self.id_list = list()
         self.subtitution_choices = list() 
-        self.substitution_menu = ("Choisissez une substitution:\n")
+        self.substitution_menu = ("\nChoisissez une substitution:\n")
         self.substitute_chosen = str()
         self.id_substitute_chosen = int()
         self.retry_menu = ("Voulez-vous faire une nouvelle recherche?\n1. Oui, pourquoi pas?\n2. Non\n")
@@ -38,8 +38,10 @@ class Ui:
 
     def reset_attributes(self) : 
         self.names_retrieved = list()
+        self.category_menu = ("\nChoisissez désormais votre catégorie:\n")
         self.category_choices = list()
         self.category_chosen = str()
+        self.product_menu = ("\nChoisissez désormais l'aliment à remplacer:\n")
         self.product_choices = list()
         self.product_chosen = str()
         self.substitute_data = dict()
@@ -47,6 +49,7 @@ class Ui:
         self.substitute_prompt = str()
         self.id_list = list()
         self.subtitution_choices = list() 
+        self.substitution_menu = ("\nChoisissez une substitution:\n")
         self.substitute_chosen = str()
         self.id_substitute_chosen = int()
 
