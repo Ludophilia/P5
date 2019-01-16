@@ -1,4 +1,4 @@
-# P5 (en construction)
+# P5
 
 *P5* permet de **trouver un substitut de meilleure qualité nutritionnelle** à une liste d’aliments de tous les jours
 
@@ -21,7 +21,7 @@
 
 > python3 main.py
 
-## Installation de la base de donnée et remplissage
+## Installation de la base de données et remplissage
 
 Créer la base de données et la remplir :
 > python3 main.py -b [--build_db]
