@@ -1,20 +1,29 @@
 from classes import *
 import config as cfg
 
+
 def main():
-    
+
     UI = Ui(1.5)
 
-    UI.add_argument_to_parser('-b', '--build_db', "Enable or disable database creation and filling", "store_true")
-    UI.add_argument_to_parser('-v', '--verbose', "Make table filling and data testing talkative", "store_true")
+    UI.add_argument_to_parser(
+        '-b',
+        '--build_db',
+        "Enable or disable database creation and filling",
+        "store_true")
+    UI.add_argument_to_parser(
+        '-v',
+        '--verbose',
+        "Make table filling and data testing talkative",
+        "store_true")
 
     database = Database(
-        cfg.mysql['user'], 
+        cfg.mysql['user'],
         cfg.mysql['password'],
-        cfg.mysql['host'], 
+        cfg.mysql['host'],
         cfg.mysql['use_unicode'],
         UI.parser_args.verbose)
-    
+
     if UI.parser_args.build_db is True:  
         
         nutriscores = Structural_data("nutriscores.txt") 
@@ -110,6 +119,7 @@ def main():
     print("Merci d'avoir utilisé P5, à une prochaine fois peut-être !!")
     
     database.close_cursor()
+
 
 if __name__ == "__main__": 
     main()
