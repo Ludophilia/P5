@@ -24,9 +24,7 @@
 ## Installation de la base de données et remplissage
 
 Créer la base de données et la remplir :
-> python3 main.py -b 
-> python3 main.py --build_db
+> python3 main.py -b (--build_db)
 
 Bénéficier d'un retour d'informations lors du remplissage :
-> python3 main.py -v
-> python3 main.py --verbose
+> python3 main.py -v (--verbose)
